@@ -1,54 +1,211 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Image } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Button, Icon, Left, Body, Right } from 'native-base';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Entypo } from "@expo/vector-icons";
+import { Button } from "native-base";
 
+let itemArray = new Array(9).fill("empty");
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <Container>
-        <Header />
-        <Content>
-          <Card>
-            <CardItem>
-              <Left>
-                <Thumbnail source={{ uri: "https://images.pexels.com/photos/2522671/pexels-photo-2522671.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" }} />
-                <Body>
-                  <Text>Aniket Pradhan</Text>
-                  <Text note>Coder</Text>
-                </Body>
-              </Left>
-            </CardItem>
-            <CardItem cardBody>
-              <Image
-                source={{ uri: "https://images.pexels.com/photos/3532556/pexels-photo-3532556.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" }}
-                style={{ height: 200, width: null, flex: 1 }}
+const App = () => {
+  const [isCross, setIsCross] = useState(false);
+  const [winMessage, setWinMessage] = useState("");
+
+  const drawItem = (itemNumber) => {
+    if (itemArray[itemNumber] === "empty") {
+      itemArray[itemNumber] = isCross;
+      setIsCross({ isCross: !itemArray[itemNumber] });
+    }
+
+    winGame();
+  };
+
+  const chooseItemIcon = (itemNumber) => {
+    if (itemArray[itemNumber] !== "empty") {
+      return itemArray[itemNumber] ? "cross" : "circle";
+    }
+    return "pencil";
+  };
+
+  const chooseItemColor = (itemNumber) => {
+    if (itemArray[itemNumber] !== "empty") {
+      return itemArray[itemNumber] ? "red" : "green";
+    }
+    return "black";
+  };
+
+  const resetGame = () => {
+    itemArray.fill("empty");
+    setWinMessage({ winMessage: "" });
+
+    //force update to component
+    forceUpdate();
+  };
+
+  const winGame = () => {
+    if (
+      itemArray[0] !== "empty" &&
+      itemArray[0] === itemArray[1] &&
+      itemArray[1] === itemArray[2]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[0] ? "cross" : "circle").concat(" win"),
+      });
+    } else if (
+      itemArray[3] !== "empty" &&
+      itemArray[3] === itemArray[4] &&
+      itemArray[4] === itemArray[5]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[3] ? "cross" : "circle").concat(" win"),
+      });
+    } else if (
+      itemArray[6] !== "empty" &&
+      itemArray[6] === itemArray[7] &&
+      itemArray[7] === itemArray[8]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[6] ? "cross" : "circle").concat(" win"),
+      });
+    } else if (
+      itemArray[0] !== "empty" &&
+      itemArray[0] === itemArray[3] &&
+      itemArray[3] === itemArray[6]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[0] ? "cross" : "circle").concat(" win"),
+      });
+    } else if (
+      itemArray[1] !== "empty" &&
+      itemArray[1] === itemArray[4] &&
+      itemArray[4] === itemArray[7]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[1] ? "cross" : "circle").concat(" win"),
+      });
+    } else if (
+      itemArray[2] !== "empty" &&
+      itemArray[2] === itemArray[5] &&
+      itemArray[5] === itemArray[8]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[2] ? "cross" : "circle").concat(" win"),
+      });
+    } else if (
+      itemArray[0] !== "empty" &&
+      itemArray[0] === itemArray[4] &&
+      itemArray[4] === itemArray[8]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[0] ? "cross" : "circle").concat(" win"),
+      });
+    } else if (
+      itemArray[2] !== "empty" &&
+      itemArray[2] === itemArray[4] &&
+      itemArray[4] === itemArray[6]
+    ) {
+      setWinMessage({
+        winMessage: (itemArray[2] ? "cross" : "circle").concat(" win"),
+      });
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.grid}>
+        <View style={styles.row}>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(0)}>
+              <Entypo
+                name={chooseItemIcon(0)}
+                size={50}
+                color={chooseItemColor(0)}
               />
-            </CardItem>
-            <CardItem>
-              <Left>
-                <Button transparent>
-                  <Icon active name="thumbs-up" />
-                  <Text>12 Likes</Text>
-                </Button>
-              </Left>
-              <Body>
-                <Button transparent>
-                  <Icon active name="chatbubbles" />
-                  <Text>4 Comments</Text>
-                </Button>
-              </Body>
-              <Right>
-                <Text>11h ago</Text>
-              </Right>
-            </CardItem>
-          </Card>
-        </Content>
-      </Container>
-    );
-  }
-}
+            </TouchableOpacity>
+          </View>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(1)}>
+              <Entypo
+                name={chooseItemIcon(1)}
+                size={50}
+                color={chooseItemColor(1)}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(2)}>
+              <Entypo
+                name={chooseItemIcon(2)}
+                size={50}
+                color={chooseItemColor(2)}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(3)}>
+              <Entypo
+                name={chooseItemIcon(3)}
+                size={50}
+                color={chooseItemColor(3)}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(4)}>
+              <Entypo
+                name={chooseItemIcon(4)}
+                size={50}
+                color={chooseItemColor(4)}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(5)}>
+              <Entypo
+                name={chooseItemIcon(5)}
+                size={50}
+                color={chooseItemColor(5)}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(6)}>
+              <Entypo
+                name={chooseItemIcon(6)}
+                size={50}
+                color={chooseItemColor(6)}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(7)}>
+              <Entypo
+                name={chooseItemIcon(7)}
+                size={50}
+                color={chooseItemColor(7)}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.item}>
+            <TouchableOpacity onPress={() => drawItem(8)}>
+              <Entypo
+                name={chooseItemIcon(8)}
+                size={50}
+                color={chooseItemColor(8)}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      <Text style={styles.winmessage}>{winMessage}</Text>
+      <Button full rounded primary style={styles.button}>
+        <Text style={styles.btnText}>Reset Game</Text>
+      </Button>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -57,9 +214,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  grid: {},
+  row: {
+    flexDirection: "row",
+  },
+  item: {
+    borderWidth: 2,
+    borderColor: "#000",
+    padding: 30,
+  },
+  winmessage: {
+    padding: 20,
+    fontSize: 25,
+    fontWeight: "bold",
+  },
   button: {
+    margin: 20,
     padding: 10,
-    backgroundColor: "orange",
+  },
+  btnText: {
     color: "#fff",
+    fontWeight: "bold",
   },
 });
+
+export default App;
